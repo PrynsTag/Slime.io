@@ -21,7 +21,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 class RunGame {
-    public final String TITLE = "Slime.io!";
     private Group root = new Group();
     private Scene scene;
     private Player player;
@@ -39,7 +38,7 @@ class RunGame {
     private Text statusBar;
 
     public String getTitle() {
-        return TITLE;
+        return Constants.TITLE;
     }
 
     //Constructor to pass on Stage

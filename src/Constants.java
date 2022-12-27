@@ -26,4 +26,5 @@ public class Constants {
                 new Stop(0, Color.web("#F2D324")),
                 new Stop(1, Color.web("#F02B2B"))
         );
+    static final String TITLE = "Slime.io!";
 }
