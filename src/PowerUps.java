@@ -37,7 +37,6 @@ public class PowerUps {
      * Generate power ups at random locations
      */
     void generate(Group root, Scene scene) {
-        System.out.println("powerups generated");
         Circle immunity = this.getImmunity();
         Circle speedBoost = this.getSpeedBoost();
 

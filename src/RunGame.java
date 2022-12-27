@@ -199,7 +199,7 @@ class RunGame {
                     newtimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            Platform.runLater(() -> powerUps.remove(root));
+                            Platform.runLater(RunGame.this::removeAllPowerUps);
                         }
                     }, 5000);
                 });
@@ -214,7 +214,6 @@ class RunGame {
      */
     public Scene initBoss() {
         freeze = false;
-//        root = new Group();
         scene = new Scene(root, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Color.BLACK);
 
         player = new Player();
