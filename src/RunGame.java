@@ -35,6 +35,7 @@ class RunGame {
     private int time = 0;
     private double speed = 1.0;
     private Timer timer;
+    private Timer statusBarTimer;
     private Text statusBar;
 
     public String getTitle() {
@@ -85,13 +86,14 @@ class RunGame {
         generateEnemies();
         foodManager.generate(root, scene, 5);
         generatePowerUps();
+        generateStatusBar();
 
         scene.setOnKeyPressed(e -> player.handleKeyInput(e.getCode(), scene));
 
         return scene;
     }
 
-    public void generateStatusBar(double elapsedTime) {
+    public void generateStatusBar() {
         if (statusBar != null) {
             root.getChildren().remove(statusBar);
         }
@@ -101,12 +103,19 @@ class RunGame {
         statusBar.setFill(Constants.linearGradient);
         statusBar.setX(0);
         statusBar.setY(40);
-        statusBar.setText(
-                "  Food: " + player.getFoodsEaten() +
-                        "  Blobs: " + player.getBlobsEaten() +
-                        "  Size: " + player.getImage().getFitHeight() +
-                        "  Time: " + time / 100
-        );
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> statusBar.setText(
+                        "  Food: " + player.getFoodsEaten() +
+                                "  Blobs: " + player.getBlobsEaten() +
+                                "  Size: " + player.getImage().getFitHeight() +
+                                "  Time: " + time / 100
+                ));
+            }
+        };
+        statusBarTimer = new Timer();
+        statusBarTimer.scheduleAtFixedRate(timerTask, 0, 1000);
         root.getChildren().add(statusBar);
     }
 
@@ -242,7 +251,6 @@ class RunGame {
             updateFoods();
             handleEnemyDeath();
             handleFoodEaten();
-            generateStatusBar(elapsedTime);
 
             gameCondition();
 
@@ -481,6 +489,10 @@ class RunGame {
      * set splashes + key on win level 2
      */
     private void winCondition() {
+        if (statusBarTimer != null) {
+            statusBarTimer.cancel();
+            statusBarTimer.purge();
+        }
         removeAllPowerUps();
         freeze = true;
         setTitle(root, "wingame", 2, 3);
@@ -505,6 +517,10 @@ class RunGame {
      * set splashes + key on lose both levels
      */
     private void gameOver() {
+        if (statusBarTimer != null) {
+            statusBarTimer.cancel();
+            statusBarTimer.purge();
+        }
         removeAllPowerUps();
         freeze = true;
         setTitle(root, "gameover", 2, 3);
